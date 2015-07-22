@@ -18,9 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Dropbox   = require('../util/dropbox')()
 var Rx        = require('rx')
 var uiIntents = require('../intents/ui')
+var User      = require('./user')()
+var Dropbox   = require('../util/dropbox')(User.getToken()) // TODO: This is really stupid...
 
 var fetchSubject = new Rx.Subject()
 

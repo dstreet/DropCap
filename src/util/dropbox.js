@@ -24,9 +24,7 @@ var remote        = require('remote')
 var BrowserWindow = remote.require('browser-window');
 var config        = remote.require('./config').dropbox
 
-var token = 'LcQEBNdMcJIAAAAAAAAEDvINzCIScb5jWbfGgQAG3duA1jYvzXkqvrOGA3q6FI0B'
-
-module.exports = function() {
+module.exports = function(token) {
 
 	var api = {
 
