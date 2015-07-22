@@ -2,6 +2,8 @@
 
 Electron app to take can sync screen captures with Dropbox.
 
+**Warning:** This is still a work in progress. Use at your own risk!
+
 ## Setup
 
 1. First, you must create an app in Dropbox.
