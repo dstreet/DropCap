@@ -1,6 +1,10 @@
 # DropCap
 
-Electron app to take can sync screen captures with Dropbox.
+Electron app to take and sync screen captures with Dropbox. App will
+automatically make shareable links and copy the link to your clipboard for
+fast and easy sharing.
+
+![DropCap](/screenshot.png?raw=true)
 
 **Warning:** This is still a work in progress. Use at your own risk!
 
