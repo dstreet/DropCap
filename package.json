@@ -1,0 +1,18 @@
+{
+  "name": "DropCap",
+  "version": "0.0.1",
+  "description": "Sync screen captures with Dropbox",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Street",
+  "license": "GPLv3",
+  "dependencies": {
+    "menubar": "^2.0.14",
+    "react": "^0.13.3",
+    "rx": "^2.5.3",
+    "rx-react": "^0.2.0",
+    "snabbdom": "^0.2.1"
+  }
+}

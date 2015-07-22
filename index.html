@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DropCap</title>
+
+	<style type="text/css">
+
+		body, html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+
+		html {
+			overflow: hidden;
+		}
+
+		body {
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		#app {
+			width: 400px;
+			height: 450px;
+			background: url(img/frame.svg) no-repeat;
+			padding-top: 100px;
+			box-sizing: border-box;
+		}
+
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<div class="wrapper"></div>
+	</div>
+
+	<script>
+
+		var app = require('./src/app')
+
+		app.init(document.querySelector('#app > .wrapper'))
+
+	</script>
+</body>
+</html>
