@@ -40,7 +40,6 @@ module.exports = React.createClass({
 	},
 
 	componentDidMount: function() {
-		console.log(this.props)
 		uiIntents.set('deletePhoto', React.findDOMNode(this.refs.delete), 'click', this.props.meta)
 	},
 
@@ -86,10 +85,6 @@ module.exports = React.createClass({
 		if (e.clientX >= window.outerWidth || e.clientX <= 0) {
 			this.onMouseUp()
 		}
-	},
-
-	onDelete: function() {
-		console.log('Delete!!!!!!')
 	},
 
 	render: function() {

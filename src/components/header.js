@@ -1,6 +1,6 @@
 /*!
- * User Store
- * ~~~~~~~~~~
+ * Header Component
+ * ~~~~~~~~~~~~~~~~~~~~~~
  *
  * Copyright (C) 2015  David Street
  *
@@ -18,24 +18,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-var Rx        = require('rx')
+var React     = require('react/addons')
 var uiIntents = require('../intents/ui')
-var Dropbox   = require('../util/dropbox')()
 
-var authSubject = new Rx.Subject()
+var h = React.createElement
 
-uiIntents.get('authorize')
-	.flatMap(function() {
-		return Rx.Observable.fromNodeCallback(Dropbox.authorize)()
-	})
-	.subscribe(function(res) {
-		authSubject.onNext(res['access_token'])
-		localStorage.setItem('token', res['access_token'])
-	})
+module.exports = React.createClass({
 
-module.exports = {
+	displayName: 'Header',
 
-	authorize: authSubject.startWith(localStorage.getItem('token')),
+	componentDidMount: function() {
+		// uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
+		// uiIntents.set('settings', React.findDOMNode(this.refs.settings), 'click')
+	},
 
-}
+	render: function() {
+
+		var styles = {
+
+			container: {
+				height: 80
+			}
+
+		}
+
+		return (
+			h('div', {
+				style: styles.container
+			}, [
+				h('button', { ref: 'capture' }, 'Capture'),
+				h('button', { ref: 'settings' }, 'Settings')
+			])
+		)
+
+	}
+
+})

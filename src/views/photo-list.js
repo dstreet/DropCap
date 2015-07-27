@@ -39,7 +39,7 @@ module.exports = React.createClass({
 	},
 
 	componentWillMount: function() {
-		require('../stores/photos').fetch()
+		require('../stores/photos').fetch(this.props.token)
 	},
 
 	getStateStream: function() {

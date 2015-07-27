@@ -20,20 +20,21 @@
 
 var Rx        = require('rx')
 var uiIntents = require('../intents/ui')
-var User      = require('./user')()
-var Dropbox   = require('../util/dropbox')(User.getToken()) // TODO: This is really stupid...
+var User      = require('./user')
+var Dropbox   = require('../util/dropbox')()
 
 var fetchSubject = new Rx.Subject()
 
-exports.fetch = function() {
+exports.fetch = function(token) {
+	Dropbox.setToken(token)
 	fetchSubject.onNext()
 }
 
 exports.photoStream =
-	fetchSubject.map(function() {
+	fetchSubject.flatMap(function() {
 		// Get sequence of files from root directory metadata
 		return Rx.Observable.fromCallback(Dropbox.getMetaData)()
-	}).mergeAll()
+	})
 	.map(function(n) {
 		return Rx.Observable.from(n.contents)
 	}).mergeAll()

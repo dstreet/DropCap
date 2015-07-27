@@ -28,7 +28,7 @@ module.exports = React.createClass({
 	displayName: 'Authorize',
 
 	componentDidMount: function() {
-		uiIntents.set('doAuth', React.findDOMNode(this.refs.auth), 'click')
+		uiIntents.set('authorize', React.findDOMNode(this.refs.auth), 'click')
 	},
 
 	render: function() {

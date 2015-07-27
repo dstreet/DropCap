@@ -24,7 +24,9 @@ var remote        = require('remote')
 var BrowserWindow = remote.require('browser-window');
 var config        = remote.require('./config').dropbox
 
-module.exports = function(token) {
+var token = null
+
+module.exports = function() {
 
 	var api = {
 
@@ -77,6 +79,10 @@ module.exports = function(token) {
 				'redirect_uri':  config.auth.redirectUri,
 				'client_id':     config.auth.appKey,
 			})
+		},
+
+		setToken: function(t) {
+			token = t
 		},
 
 		/**

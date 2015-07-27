@@ -21,10 +21,10 @@
 var Rx        = require('rx')
 var React     = require('react')
 var Authorize = require('./views/authorize')
-var PhotoList = require('./views/photo-list')
+var AppShell  = require('./views/app-shell')
 var uiIntents = require('./intents/ui')
-var user      = require('./stores/user')()
-var Dropbox   = require('./util/dropbox')()
+// var user      = require('./stores/user')()
+// var Dropbox   = require('./util/dropbox')()
 
 var h = React.createElement
 
@@ -33,22 +33,28 @@ module.exports = {
 	init: function(container) {
 		this.container = container
 		this.render()
-		uiIntents.get('doAuth')
-			.map(function() {
-				return Rx.Observable.fromNodeCallback(Dropbox.authorize)()
-			}).mergeAll()
-			.subscribe(function(n) {
-				user.saveToken(n['access_token'])
-				this.render()
-			}.bind(this))
+
+		// Rx.Observable.just(user.getToken())
+		// 	.map(function(n) {
+		// 		if (n) {
+		// 			return Rx.Observable.just(n)
+		// 		}
+		//
+		// 		return Rx.Observable.fromNodeCallback(Dropbox.authorize)()
+		// 			.map(function(n) {
+		// 				return n['access_token']
+		// 			})
+		// 	}).mergeAll()
+		// 	.subscribe(function(token) {
+		// 		user.saveToken(token)
+		// 		console.log(this)
+		//
+		// 		this.render()
+		// 	}.bind(this))
 	},
 
 	render: function() {
-		if (user.getToken()) {
-			React.render(h(PhotoList), this.container)
-		} else {
-			React.render(h(Authorize), this.container)
-		}
+		React.render(h(AppShell), this.container)
 	}
 
 }
