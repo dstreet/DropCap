@@ -18,10 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Rx        = require('rx')
-var uiIntents = require('../intents/ui')
-var User      = require('./user')
-var Dropbox   = require('../util/dropbox')()
+var Rx            = require('rx')
+var nativeImage   = require('native-image')
+var uiIntents     = require('../intents/ui')
+var User          = require('./user')
+var Dropbox       = require('../util/dropbox')()
+var ScreenCapture = require('../util/screen-capture')()
 
 var fetchSubject = new Rx.Subject()
 
@@ -29,6 +31,23 @@ exports.fetch = function(token) {
 	Dropbox.setToken(token)
 	fetchSubject.onNext()
 }
+
+var captured = uiIntents.get('capture')
+	.flatMap(function() {
+		return Rx.Observable.fromNodeCallback(ScreenCapture.take)()
+	})
+	.flatMap(function(data) {
+		var time = (new Date()).getTime()
+		var name = 'capture_' + time
+
+		return Rx.Observable.fromNodeCallback(Dropbox.uploadFile)(name, data)
+	})
+	.map(function(n) {
+		return {
+			data: n.file.toDataUrl(),
+			meta: n.meta
+		}
+	})
 
 exports.photoStream =
 	fetchSubject.flatMap(function() {
@@ -51,6 +70,7 @@ exports.photoStream =
 			meta: n.meta
 		}
 	})
+	.merge(captured)
 
 exports.deleteStream =
 	// Observe photo deletion UI event

@@ -158,6 +158,32 @@ module.exports = function() {
 		},
 
 		/**
+		 * [function description]
+		 * @param  {[type]}   path     [description]
+		 * @param  {[type]}   fileData [description]
+		 * @param  {Function} cb       [description]
+		 * @return {[type]}            [description]
+		 */
+		uploadFile: function(path, file, cb) {
+			var opts = {
+				hostname: 'api-content.dropbox.com',
+				path: '/1/files_put/auto/' + path ,
+				method: 'PUT',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+					'Content-Type': 'image/png'
+				}
+			}
+
+			api._sendRequest(opts, 'utf8', file.toPng(), function(err, res) {
+				cb(err, {
+					file: file,
+					meta: JSON.parse(res.body)
+				})
+			})
+		},
+
+		/**
 		 * Start the OAuth2 flow
 		 *
 		 * @param  {Function} cb

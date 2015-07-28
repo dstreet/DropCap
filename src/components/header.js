@@ -28,8 +28,8 @@ module.exports = React.createClass({
 	displayName: 'Header',
 
 	componentDidMount: function() {
-		// uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
-		// uiIntents.set('settings', React.findDOMNode(this.refs.settings), 'click')
+		uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
+		uiIntents.set('settings', React.findDOMNode(this.refs.settings), 'click')
 	},
 
 	render: function() {

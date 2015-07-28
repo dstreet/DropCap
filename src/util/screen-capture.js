@@ -1,6 +1,6 @@
 /*!
- * Application
- * ~~~~~~~~~~~
+ * Screen Capture Utility
+ * ~~~~~~~~~~~~~~~~~~~~~~
  *
  * Copyright (C) 2015  David Street
  *
@@ -18,22 +18,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Rx        = require('rx')
-var React     = require('react')
-var Authorize = require('./views/authorize')
-var AppShell  = require('./views/app-shell')
+var exec      = require('child_process').exec
+var clipboard = require('clipboard')
 
-var h = React.createElement
+module.exports = function() {
 
-module.exports = {
+	var api = {
+		
+		take: function(cb) {
+			switch (process.platform) {
+				case 'darwin':
+					api._takeDarwin(cb)
+					break;
+				case 'linux':
+				case 'win32':
+				default:
+					break;
+			}
+		},
 
-	init: function(container) {
-		this.container = container
-		this.render()
-	},
+		_takeDarwin: function(cb) {
+			var child = exec('screencapture -ic', function(err) {
+				if (err) {
+					return cb(err)
+				}
 
-	render: function() {
-		React.render(h(AppShell), this.container)
+				var img = clipboard.readImage()
+
+				cb(null, img)
+			})
+		}
+
 	}
+
+	return api
 
 }
