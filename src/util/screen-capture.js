@@ -24,7 +24,7 @@ var clipboard = require('clipboard')
 module.exports = function() {
 
 	var api = {
-		
+
 		take: function(cb) {
 			switch (process.platform) {
 				case 'darwin':
@@ -44,6 +44,10 @@ module.exports = function() {
 				}
 
 				var img = clipboard.readImage()
+
+				if (img.isEmpty()) {
+					return cb(new Error("No image data available on clipboard"))
+				}
 
 				cb(null, img)
 			})
