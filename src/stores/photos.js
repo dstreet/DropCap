@@ -24,8 +24,10 @@ var uiIntents     = require('../intents/ui')
 var User          = require('./user')
 var Dropbox       = require('../util/dropbox')()
 var ScreenCapture = require('../util/screen-capture')()
+var clipboard     = require('clipboard')
 
 var fetchSubject = new Rx.Subject()
+var shareSubject = new Rx.Subject()
 
 exports.fetch = function(token) {
 	Dropbox.setToken(token)
@@ -33,35 +35,54 @@ exports.fetch = function(token) {
 }
 
 var captured = uiIntents.get('capture')
+	// Take a screen capture
 	.flatMap(function() {
 		return Rx.Observable.fromNodeCallback(ScreenCapture.take)()
 	})
+
+	// Upload the file data
 	.flatMap(function(data) {
 		var time = (new Date()).getTime()
-		var name = 'capture_' + time
+		var name = 'capture_' + time + '.png'
 
 		return Rx.Observable.fromNodeCallback(Dropbox.uploadFile)(name, data)
 	})
+
+	// Map file data and metadata to an object for consumption. Yum!
 	.map(function(n) {
+
+		// Trigger sharing
+		shareSubject.onNext(n.meta.path)
+
 		return {
 			data: n.file.toDataUrl(),
 			meta: n.meta
 		}
 	})
 
-exports.photoStream =
-	fetchSubject.flatMap(function() {
-		// Get sequence of files from root directory metadata
+shareSubject.flatMap(function(path) {
+	return Rx.Observable.fromNodeCallback(Dropbox.shareFile)(path)
+})
+.subscribe(function(n) {
+	clipboard.writeText(n.url)
+	new Notification('Public url copied to your clipboard')
+})
+
+exports.photoStream = fetchSubject
+	// Get sequence of files from root directory metadata
+	.flatMap(function() {
 		return Rx.Observable.fromCallback(Dropbox.getMetaData)()
 	})
-	.map(function(n) {
+
+	// Convert the resulting array of files to a sequence
+	.flatMap(function(n) {
 		return Rx.Observable.from(n.contents)
-	}).mergeAll()
+	})
 
 	// Get file data for each file
-	.map(function(n) {
+	.flatMap(function(n) {
 		return Rx.Observable.fromCallback(Dropbox.getFile)(n.path)
-	}).mergeAll()
+	})
 
 	// Get base64 string and metadata for photo
 	.map(function(n){
@@ -70,6 +91,8 @@ exports.photoStream =
 			meta: n.meta
 		}
 	})
+
+	// Merge the captured image stream
 	.merge(captured)
 
 exports.deleteStream =

@@ -158,11 +158,11 @@ module.exports = function() {
 		},
 
 		/**
-		 * [function description]
-		 * @param  {[type]}   path     [description]
-		 * @param  {[type]}   fileData [description]
-		 * @param  {Function} cb       [description]
-		 * @return {[type]}            [description]
+		 * Upload a file
+		 *
+		 * @param  {String}        path
+		 * @param  {NativeImage}   fileData
+		 * @param  {Function} cb
 		 */
 		uploadFile: function(path, file, cb) {
 			var opts = {
@@ -180,6 +180,31 @@ module.exports = function() {
 					file: file,
 					meta: JSON.parse(res.body)
 				})
+			})
+		},
+
+		/**
+		 * Get a share link for a file
+		 *
+		 * @param  {String}   path
+		 * @param  {Function} cb
+		 */
+		shareFile: function(path, cb) {
+			var opts = {
+				hostname: 'api.dropbox.com',
+				path: '/1/shares/auto/' + path,
+				method: 'POST',
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			}
+
+			api._sendRequest(opts, 'utf8', null, function(err, res) {
+				if (err) {
+					return cb(err)
+				}
+
+				cb(null, JSON.parse(res.body))
 			})
 		},
 
