@@ -100,6 +100,9 @@ exports.deleteStream =
 	uiIntents.get('deletePhoto')
 
 	// Send delete to Dropbox
-	.map(function(d) {
+	.flatMap(function(d) {
 		return Rx.Observable.fromCallback(Dropbox.deleteFile)(d.data.path)
-	}).mergeAll()
+	})
+	.subscribe(function(n) {
+		console.log('Deleted:', n)
+	})

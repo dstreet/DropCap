@@ -23,8 +23,12 @@ var Photo            = require('../components/photo')
 var photoStream      = require('../stores/photos').photoStream
 var deleteStream     = require('../stores/photos').deleteStream
 var StateStreamMixin = require('rx-react').StateStreamMixin
+var uiIntents        = require('../intents/ui')
 
 var h = React.createElement
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
+
+uiIntents.get('deletePhoto').subscribe(function(n) { console.log(n) })
 
 module.exports = React.createClass({
 
@@ -49,7 +53,7 @@ module.exports = React.createClass({
 			})
 			// Strip out any photos that have been deleted
 			.combineLatest(
-				deleteStream.startWith(null),
+				uiIntents.get('deletePhoto').map(function(n) { return n.data }).startWith(null),
 				function(photos, d) {
 					if (d) {
 						var index = -1
@@ -84,9 +88,18 @@ module.exports = React.createClass({
 	},
 
 	render: function() {
-		return h('div', { style: this.props.style }, this.state.photos.map(function(p, i) {
+
+		var photos = this.state.photos.map(function(p, i) {
 			return h(Photo, { key: p.meta.rev, src: p.data, meta: p.meta })
-		}))
+		})
+
+		return (
+			h('div', {
+				style: this.props.style
+			}, [
+				h(ReactCSSTransitionGroup, { transitionName: 'photo' }, photos)
+			])
+		)
 	}
 
 })
