@@ -56,6 +56,7 @@ module.exports = React.createClass({
 			width:        300,
 			height:       450,
 			marginLeft:   10,
+			marginTop:    10,
 			background:   'rgba(255, 255, 255, 0.9)',
 			boxSizing:    'border-box',
 			boxShadow:    '0 0 10px rgba(0, 0, 0, 0.6)',
@@ -68,12 +69,20 @@ module.exports = React.createClass({
 			overflowY:    'scroll'
 		}
 
+		var pointStyle = {
+			position:     'absolute',
+			top:          0,
+			left:         '50%',
+			marginLeft:   -10
+		}
+
 		var contentView = this.state.authorized ? h(PhotoList, { style: photosStyle, token: this.state.token }) : h(Authorize)
 
 		return (
 			h('div', {
 				style: style
 			}, [
+				h('img', { src: 'img/point.svg', width: 20, height: 10, style: pointStyle }),
 
 				h(Header),
 

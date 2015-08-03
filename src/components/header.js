@@ -18,8 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var React     = require('react/addons')
-var uiIntents = require('../intents/ui')
+var React      = require('react/addons')
+var uiIntents  = require('../intents/ui')
+var IconButton = require('./icon-button')
 
 var h = React.createElement
 
@@ -29,7 +30,6 @@ module.exports = React.createClass({
 
 	componentDidMount: function() {
 		uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
-		uiIntents.set('settings', React.findDOMNode(this.refs.settings), 'click')
 	},
 
 	render: function() {
@@ -38,7 +38,15 @@ module.exports = React.createClass({
 
 			container: {
 				height:     60,
-				background: 'rgba(255, 255, 255, 0.9)'
+				background: 'rgba(47, 208, 158, 0.9)',
+				textAlign:  'center'
+			},
+
+			capture: {
+				width:      34,
+				height:     34,
+				marginLeft: 0,
+				marginTop:  12
 			}
 
 		}
@@ -47,8 +55,11 @@ module.exports = React.createClass({
 			h('div', {
 				style: styles.container
 			}, [
-				h('button', { ref: 'capture' }, 'Capture'),
-				h('button', { ref: 'settings' }, 'Settings')
+				h(IconButton, {
+					img: 'img/icon-capture.svg',
+					style: styles.capture,
+					ref: 'capture'
+				})
 			])
 		)
 

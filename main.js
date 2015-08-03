@@ -23,7 +23,7 @@ var menubar = require('menubar')
 var mainWindow = null
 var mb = menubar({
 	width:       320,
-	height:      450,
+	height:      460,
 	transparent: true,
 	frame:       false,
 	resizable:   false,
