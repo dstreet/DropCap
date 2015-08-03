@@ -38,7 +38,14 @@ module.exports = React.createClass({
 
 	propTypes: {
 		img: React.PropTypes.string.isRequired,
-		hover: React.PropTypes.string
+		hover: React.PropTypes.string,
+		onClick: React.PropTypes.func
+	},
+
+	getDefaultProps: function() {
+		return {
+			onClick: function() {}
+		}
 	},
 
 	getInitialState: function() {
@@ -64,7 +71,12 @@ module.exports = React.createClass({
 		}, this.props.style)
 
 		return (
-			h('button', { style: style, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave })
+			h('button', {
+				style: style,
+				onMouseEnter: this.onMouseEnter,
+				onMouseLeave: this.onMouseLeave,
+				onClick: this.props.onClick
+			})
 		)
 	}
 

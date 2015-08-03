@@ -22,6 +22,7 @@ var React        = require('react')
 var uiIntents    = require('../intents/ui')
 var extend       = require('extend')
 var IconButton   = require('./icon-button')
+var shell        = require('shell')
 
 var h = React.createElement
 
@@ -42,6 +43,8 @@ module.exports = React.createClass({
 
 	componentDidMount: function() {
 		uiIntents.set('deletePhoto', React.findDOMNode(this.refs.delete), 'click', this.props.meta)
+		uiIntents.set('share', React.findDOMNode(this.refs.share), 'click', this.props.meta)
+		uiIntents.set('preview', React.findDOMNode(this.refs.preview), 'click', this.props.meta)
 	},
 
 	onMouseDown: function(e) {
@@ -190,8 +193,8 @@ module.exports = React.createClass({
 					]),
 
 					h('div', { style: {position: 'absolute', right: 10, top: 17} }, [
-						h(IconButton, { img: 'img/icon-share.svg', hover: 'img/icon-share-active.svg' }),
-						h(IconButton, { img: 'img/icon-browser.svg', hover: 'img/icon-browser-active.svg' })
+						h(IconButton, { img: 'img/icon-share.svg', hover: 'img/icon-share-active.svg', ref: 'share' }),
+						h(IconButton, { img: 'img/icon-browser.svg', hover: 'img/icon-browser-active.svg', ref: 'preview' })
 					])
 
 				])

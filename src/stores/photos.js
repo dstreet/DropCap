@@ -25,6 +25,7 @@ var User          = require('./user')
 var Dropbox       = require('../util/dropbox')()
 var ScreenCapture = require('../util/screen-capture')()
 var clipboard     = require('clipboard')
+var shell         = require('shell')
 
 var fetchSubject = new Rx.Subject()
 var shareSubject = new Rx.Subject()
@@ -60,13 +61,23 @@ var captured = uiIntents.get('capture')
 		}
 	})
 
-shareSubject.flatMap(function(path) {
+shareSubject
+.merge(uiIntents.get('share').map(function(e) { return e.data.path }))
+.flatMap(function(path) {
 	return Rx.Observable.fromNodeCallback(Dropbox.shareFile)(path)
 })
 .subscribe(function(n) {
 	clipboard.writeText(n.url)
 	new Notification('Public url copied to your clipboard')
 })
+
+var preview = uiIntents.get('preview')
+	.flatMap(function(e) {
+		return Rx.Observable.fromNodeCallback(Dropbox.shareFile)(e.data.path)
+	})
+	.subscribe(function(n) {
+		shell.openExternal(n.url)
+	})
 
 exports.photoStream = fetchSubject
 	// Get sequence of files from root directory metadata
