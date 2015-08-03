@@ -37,7 +37,8 @@ module.exports = React.createClass({
 		var styles = {
 
 			container: {
-				height: 80
+				height:     60,
+				background: 'rgba(255, 255, 255, 0.9)'
 			}
 
 		}

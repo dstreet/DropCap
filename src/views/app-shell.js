@@ -53,14 +53,22 @@ module.exports = React.createClass({
 	render: function() {
 
 		var style = {
-			width:      400,
-			height:     450,
-			background: 'url(img/frame.svg) no-repeat',
-			boxSizing:  'border-box',
-			paddingTop: 20
+			width:        300,
+			height:       450,
+			marginLeft:   10,
+			background:   'rgba(255, 255, 255, 0.9)',
+			boxSizing:    'border-box',
+			boxShadow:    '0 0 10px rgba(0, 0, 0, 0.6)',
+			borderRadius: 10,
+			overflow:     'hidden'
 		}
 
-		var contentView = this.state.authorized ? h(PhotoList, { token: this.state.token }) : h(Authorize)
+		var photosStyle = {
+			height:       390,
+			overflowY:    'scroll'
+		}
+
+		var contentView = this.state.authorized ? h(PhotoList, { style: photosStyle, token: this.state.token }) : h(Authorize)
 
 		return (
 			h('div', {
@@ -69,7 +77,7 @@ module.exports = React.createClass({
 
 				h(Header),
 
-				contentView
+				h(PhotoList, { style: photosStyle, token: this.state.token })
 
 			])
 		)

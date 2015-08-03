@@ -84,7 +84,7 @@ module.exports = React.createClass({
 	},
 
 	render: function() {
-		return h('div', null, this.state.photos.map(function(p, i) {
+		return h('div', { style: this.props.style }, this.state.photos.map(function(p, i) {
 			return h(Photo, { key: p.meta.rev, src: p.data, meta: p.meta })
 		}))
 	}

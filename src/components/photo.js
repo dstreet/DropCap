@@ -19,8 +19,9 @@
  */
 
 var React        = require('react')
-var PublicToggle = require('../components/public-toggle')
 var uiIntents    = require('../intents/ui')
+var extend       = require('extend')
+var IconButton   = require('./icon-button')
 
 var h = React.createElement
 
@@ -30,7 +31,7 @@ module.exports = React.createClass({
 
 	isDragging: false,
 	dragStart: 0,
-	deletePos: 100,
+	deletePos: 75,
 	willDelete: false,
 
 	getInitialState: function() {
@@ -91,9 +92,12 @@ module.exports = React.createClass({
 		var styles = {
 			container: {
 				width:               '100%',
-				height:              92,
+				height:              50,
 				position:            'relative',
-				overflow:            'hidden'
+				overflow:            'hidden',
+				borderBottom:        '1px solid #fff',
+				WebkitUserSelect:    'none',
+				color:               '#847e79'
 			},
 
 			photo: {
@@ -107,7 +111,7 @@ module.exports = React.createClass({
 				position:            'absolute',
 				width:               this.state.left,
 				height:              '100%',
-				backgroundColor:     'tomato',
+				background:          'linear-gradient(to right, #ed4559 90%, #a22134 100%)',
 				color:               '#fff',
 				border:              'none',
 				WebkitUserSelect:    'none',
@@ -122,7 +126,7 @@ module.exports = React.createClass({
 				backgroundPositionY: '50%',
 				WebkitMask:          'url(img/mask.svg) top left / cover',
 				maskSourceType:      'alpha',
-				width:               230,
+				width:               140,
 				height:              '100%',
 				display:             'inline-block',
 				cursor:              'pointer'
@@ -132,7 +136,16 @@ module.exports = React.createClass({
 				height:              '100%',
 				display:             'inline-block',
 				position:            'absolute',
-				top:                 0
+				top:                 0,
+				paddingTop:          10,
+				boxSizing:           'border-box',
+				marginLeft:          -10
+			},
+
+			metaLabel: {
+				display:             'inline-block',
+				width:               30,
+				fontWeight:          'bold'
 			}
 		}
 
@@ -140,13 +153,16 @@ module.exports = React.createClass({
 			h('div', {
 				style: styles.container,
 				onMouseMove: this.onMouseMove,
-				onMouseUp: this.onMouseUp }, [
+				onMouseUp: this.onMouseUp
+			}, [
 
 				// Delete button
 				h('button', {
 					style: styles.delete,
 					ref: 'delete'
-				}, 'Delete'),
+				}, [
+					h('img', { src: 'img/icon-trash.svg', width: 20 })
+				]),
 
 				// Photo wrapper
 				h('div', {
@@ -163,7 +179,19 @@ module.exports = React.createClass({
 					h('div', {
 						style: styles.meta
 					}, [
-						h(PublicToggle)
+						h('div', null, [
+							h('span', { style: styles.metaLabel }, 'Size'),
+							h('span', null, this.props.meta.size)
+						]),
+						h('div', null, [
+							h('span', { style: styles.metaLabel }, 'Date'),
+							h('span', null, this.props.meta.modified.replace(/\s[0-9]+:[0-9]+:[0-9]+\s\+[0-9]+/, ''))
+						])
+					]),
+
+					h('div', { style: {position: 'absolute', right: 10, top: 17} }, [
+						h(IconButton, { img: 'img/icon-share.svg', hover: 'img/icon-share-active.svg' }),
+						h(IconButton, { img: 'img/icon-browser.svg', hover: 'img/icon-browser-active.svg' })
 					])
 
 				])

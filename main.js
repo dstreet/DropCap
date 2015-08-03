@@ -18,35 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var app           = require('app')
-var BrowserWindow = require('browser-window')
-var querystring   = require('querystring')
-var https         = require('https')
+var menubar = require('menubar')
 
-var mainWindow = null;
-
-app.commandLine.appendSwitch('enable-experimental-web-platform-features')
-
-app.on('window-all-closed', function() {
-	app.quit();
+var mainWindow = null
+var mb = menubar({
+	width:       320,
+	height:      450,
+	transparent: true,
+	frame:       false,
+	resizable:   false,
+	show: true,
+	'always-on-top': true,
+	index:       'file://' + __dirname + '/index.html',
+	'web-preferences': {
+		'experimental-features': true
+	}
 })
 
-app.on('ready', function() {
-	mainWindow = new BrowserWindow({
-		width: 400,
-		height: 450,
-		transparent: true,
-		frame: false,
-		resizable: false,
-		'web-preferences': {
-			'experimental-features': true
-		}
-	})
+mb.app.commandLine.appendSwitch('enable-experimental-web-platform-features')
 
-	mainWindow.loadUrl('file://' + __dirname + '/index.html')
-	mainWindow.openDevTools()
+mb.app.on('window-all-closed', function() {
+	mb.app.quit()
+})
 
-	mainWindow.on('closed', function() {
-		mainWindow = null;
-	})
+mb.on('show', function() {
+	if (process.env.NODE_ENV == 'development') {
+		mb.window.openDevTools()
+	}
 })
