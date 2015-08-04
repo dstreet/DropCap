@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SRC_DIR="."
+NAME="DropCap"
+PLATFORM="darwin"
+ARCH="x64"
+ELECTRON_VERSION="0.30.2"
+OUT_DIR="./release"
+ICON="icon.icns"
+IGNORE="./bin"
+
+echo "==> Building release package"
+./node_modules/.bin/electron-packager $SRC_DIR $NAME --platform=$PLATFORM --arch=$ARCH --version=$ELECTRON_VERSION --out="$OUT_DIR" --icon="$ICON" --asar --overwrite

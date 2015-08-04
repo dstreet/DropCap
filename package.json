@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/electron-packager . DropCap --platform=darwin --arch=x64 --version=0.30.2 --out=./release --asar --icon=icon.icns --overwrite"
+    "build": "/bin/bash ./bin/icon && /bin/bash ./bin/build"
   },
   "author": "David Street",
   "license": "GPLv3",

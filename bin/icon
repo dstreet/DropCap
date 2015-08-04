@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ICONSET="./icon.iconset"
+
+echo "==> Generating icon"
+iconutil -c icns "$ICONSET"
