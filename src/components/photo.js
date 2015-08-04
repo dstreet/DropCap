@@ -188,7 +188,7 @@ module.exports = React.createClass({
 						]),
 						h('div', null, [
 							h('span', { style: styles.metaLabel }, 'Date'),
-							h('span', null, this.props.meta.modified.replace(/\s[0-9]+:[0-9]+:[0-9]+\s\+[0-9]+/, ''))
+							h('span', null, (new Date(this.props.meta.modified)).toDateString())
 						])
 					]),
 

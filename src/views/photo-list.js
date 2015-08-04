@@ -28,8 +28,6 @@ var uiIntents        = require('../intents/ui')
 var h = React.createElement
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
-uiIntents.get('deletePhoto').subscribe(function(n) { console.log(n) })
-
 module.exports = React.createClass({
 
 	displayName: 'PhotoList',
@@ -73,18 +71,18 @@ module.exports = React.createClass({
 				}
 			)
 			.map(function(photos) {
+				return photos.sort(function(a, b) {
+					var aDate = new Date(a.meta.modified)
+					var bDate = new Date(b.meta.modified)
+
+					return bDate - aDate
+				})
+			})
+			.map(function(photos) {
 				return {
 					photos: photos
 				}
 			})
-	},
-
-	componentDidMount: function() {
-
-	},
-
-	componentWillUnmount: function() {
-
 	},
 
 	render: function() {
