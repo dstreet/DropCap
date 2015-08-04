@@ -4,7 +4,8 @@
   "description": "Sync screen captures with Dropbox",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/electron-packager . DropCap --platform=darwin --arch=x64 --version=0.30.2 --out=./release --asar --icon=icon.icns --overwrite"
   },
   "author": "David Street",
   "license": "GPLv3",
@@ -15,5 +16,8 @@
     "rx": "^2.5.3",
     "rx-react": "^0.2.0",
     "snabbdom": "^0.2.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^5.0.1"
   }
 }

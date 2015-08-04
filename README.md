@@ -19,6 +19,10 @@ fast and easy sharing.
 
 `electron DropCap`
 
+## Building for Release
+
+`npm run build`
+
 ## Copyright
 
 Copyright (c) 2015 David Street
