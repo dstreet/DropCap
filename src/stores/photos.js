@@ -38,11 +38,14 @@ exports.fetch = function(token) {
 var captured = uiIntents.get('capture')
 	// Take a screen capture
 	.flatMap(function() {
-		return Rx.Observable.fromNodeCallback(ScreenCapture.take)()
+		return Rx.Observable.onErrorResumeNext(
+			Rx.Observable.fromNodeCallback(ScreenCapture.take)()
+		)
 	})
 
 	// Upload the file data
 	.flatMap(function(data) {
+
 		var time = (new Date()).getTime()
 		var name = 'capture_' + time + '.png'
 
@@ -62,14 +65,14 @@ var captured = uiIntents.get('capture')
 	})
 
 shareSubject
-.merge(uiIntents.get('share').map(function(e) { return e.data.path }))
-.flatMap(function(path) {
-	return Rx.Observable.fromNodeCallback(Dropbox.shareFile)(path)
-})
-.subscribe(function(n) {
-	clipboard.writeText(n.url)
-	new Notification('Public url copied to your clipboard')
-})
+	.merge(uiIntents.get('share').map(function(e) { return e.data.path }))
+	.flatMap(function(path) {
+		return Rx.Observable.fromNodeCallback(Dropbox.shareFile)(path)
+	})
+	.subscribe(function(n) {
+		clipboard.writeText(n.url)
+		new Notification('Public url copied to your clipboard')
+	})
 
 var preview = uiIntents.get('preview')
 	.flatMap(function(e) {

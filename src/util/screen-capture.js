@@ -46,7 +46,7 @@ module.exports = function() {
 				var img = clipboard.readImage()
 
 				if (img.isEmpty()) {
-					return cb(new Error("No image data available on clipboard"))
+					return cb(new Error('No image data available on clipboard'))
 				}
 
 				cb(null, img)
