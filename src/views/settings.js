@@ -33,6 +33,10 @@ module.exports = React.createClass({
 		this.setState(settings.getAll())
 	},
 
+	componentDidMount: function() {
+		uiIntents.set('deauthorize', React.findDOMNode(this.refs.deauthorize), 'click')
+	},
+
 	onChange: function(item, val) {
 		var state = {}
 
@@ -70,11 +74,13 @@ module.exports = React.createClass({
 				h(SettingItem, {
 					label: 'Create share link automatically',
 					enabled: this.state.autoShare,
-					onChange: this.onChange.bind(this, 'autoShare')
+					onChange: this.onChange.bind(this, 'autoShare'),
+					key: 'autoShare'
 				}),
 
 				h('button', {
-					style: styles.deauthorize
+					style: styles.deauthorize,
+					ref: 'deauthorize'
 				}, 'Deauthorize Account')
 			])
 		)

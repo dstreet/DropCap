@@ -34,6 +34,12 @@ uiIntents.get('authorize')
 		localStorage.setItem('token', res['access_token'])
 	})
 
+uiIntents.get('deauthorize')
+	.subscribe(function() {
+		localStorage.removeItem('token')
+		authSubject.onNext(null)
+	})
+
 module.exports = {
 
 	authorize: authSubject.startWith(localStorage.getItem('token')),
