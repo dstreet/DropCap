@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var ipc     = require('ipc')
 var menubar = require('menubar')
 
 var mainWindow = null
@@ -45,4 +46,12 @@ mb.on('show', function() {
 	if (process.env.NODE_ENV == 'development') {
 		mb.window.openDevTools()
 	}
+})
+
+ipc.on('hide-window', function() {
+	mb.window.hide()
+})
+
+ipc.on('show-window', function() {
+	mb.window.show()
 })

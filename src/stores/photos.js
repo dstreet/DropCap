@@ -27,6 +27,7 @@ var ScreenCapture = require('../util/screen-capture')()
 var clipboard     = require('clipboard')
 var shell         = require('shell')
 var settings      = require('./settings')
+var ipc           = require('ipc')
 
 var fetchSubject = new Rx.Subject()
 var shareSubject = new Rx.Subject()
@@ -37,11 +38,21 @@ exports.fetch = function(token) {
 }
 
 var captured = uiIntents.get('capture')
+	// Hide the window
+	.do(function() {
+		ipc.send('hide-window')
+	})
+
 	// Take a screen capture
 	.flatMap(function() {
 		return Rx.Observable.onErrorResumeNext(
 			Rx.Observable.fromNodeCallback(ScreenCapture.take)()
 		)
+	})
+
+	// Show the window once the screen capture has been taken
+	.do(function() {
+		ipc.send('show-window')
 	})
 
 	// Upload the file data
