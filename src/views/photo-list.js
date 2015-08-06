@@ -28,6 +28,8 @@ var uiIntents        = require('../intents/ui')
 var h = React.createElement
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
+var photosCache = []
+
 module.exports = React.createClass({
 
 	displayName: 'PhotoList',
@@ -41,12 +43,18 @@ module.exports = React.createClass({
 	},
 
 	componentWillMount: function() {
-		require('../stores/photos').fetch(this.props.token)
+		if (!photosCache.length) {
+			require('../stores/photos').fetch(this.props.token)
+		} else {
+			this.setState({
+				photos: photosCache
+			})
+		}
 	},
 
 	getStateStream: function() {
 		return photoStream
-			.scan([], function(acc, p) {
+			.scan(photosCache, function(acc, p) {
 				return acc.concat(p)
 			})
 			// Strip out any photos that have been deleted
@@ -79,6 +87,8 @@ module.exports = React.createClass({
 				})
 			})
 			.map(function(photos) {
+				photosCache = photos
+
 				return {
 					photos: photos
 				}
