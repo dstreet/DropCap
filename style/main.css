@@ -48,6 +48,10 @@ body {
     font-size: 10px;
 }
 
+body * {
+    -webkit-font-smoothing: antialiased;
+}
+
 .photo-enter {
     position: absolute;
     left: 100%;

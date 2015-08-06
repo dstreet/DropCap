@@ -21,9 +21,11 @@
 var React            = require('react/addons')
 var Header           = require('../components/header')
 var PhotoList        = require('./photo-list')
+var Settings         = require('./settings')
 var Authorize        = require('./authorize')
 var User             = require('../stores/user')
 var StateStreamMixin = require('rx-react').StateStreamMixin
+var uiIntents        = require('../intents/ui')
 
 var h = React.createElement
 
@@ -36,7 +38,8 @@ module.exports = React.createClass({
 	getInitalState: function() {
 		return {
 			token: null,
-			authorized: false
+			authorized: false,
+			showSettings: false
 		}
 	},
 
@@ -47,6 +50,20 @@ module.exports = React.createClass({
 					token: token,
 					authorized: token ? true : false
 				}
+			})
+	},
+
+	componentDidMount: function() {
+		var self = this
+
+		uiIntents.get('menu')
+			.subscribe(function() {
+				self.setState({ showSettings: true })
+			})
+
+		uiIntents.get('back')
+			.subscribe(function() {
+				self.setState({ showSettings: false })
 			})
 	},
 
@@ -76,7 +93,10 @@ module.exports = React.createClass({
 			marginLeft:   -10
 		}
 
-		var contentView = this.state.authorized ? h(PhotoList, { style: photosStyle, token: this.state.token }) : h(Authorize)
+		var photoListView = h(PhotoList, { style: photosStyle, token: this.state.token })
+		var settingsView  = h(Settings, {})
+
+		var contentView = this.state.authorized ? (this.state.showSettings ? settingsView : photoListView) : h(Authorize)
 
 		return (
 			h('div', {
@@ -86,7 +106,7 @@ module.exports = React.createClass({
 
 				h(Header),
 
-				h(PhotoList, { style: photosStyle, token: this.state.token })
+				contentView
 
 			])
 		)

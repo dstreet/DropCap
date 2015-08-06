@@ -28,8 +28,43 @@ module.exports = React.createClass({
 
 	displayName: 'Header',
 
+	getInitialState: function() {
+		return {
+			view: 'capture',
+			prevView: null
+		}
+	},
+
 	componentDidMount: function() {
-		uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
+		this.setIntents()
+	},
+
+	componentDidUpdate: function() {
+		this.setIntents()
+	},
+
+	setIntents: function() {
+		if (this.refs.capture) {
+			uiIntents.set('capture', React.findDOMNode(this.refs.capture), 'click')
+		}
+
+		if (this.refs.menu) {
+			uiIntents.set('menu', React.findDOMNode(this.refs.menu), 'click')
+		}
+
+		if (this.refs.back) {
+			uiIntents.set('back', React.findDOMNode(this.refs.back), 'click')
+		}
+	},
+
+	onClickMenu: function() {
+		this.setState({ view: 'settings', prevView: this.state.view })
+	},
+
+	onClickBack: function() {
+		if (!this.state.prevView) return
+
+		this.setState({ view: this.state.prevView, prevView: null })
 	},
 
 	render: function() {
@@ -39,7 +74,8 @@ module.exports = React.createClass({
 			container: {
 				height:     60,
 				background: 'rgba(47, 208, 158, 0.9)',
-				textAlign:  'center'
+				textAlign:  'center',
+				position:   'relative'
 			},
 
 			capture: {
@@ -47,20 +83,83 @@ module.exports = React.createClass({
 				height:     34,
 				marginLeft: 0,
 				marginTop:  12
+			},
+
+			back: {
+				width:      20,
+				height:     20,
+				marginLeft: 0,
+				position:   'absolute',
+				left:       10,
+				top:        20
+			},
+
+			menu: {
+				width:      20,
+				height:     20,
+				marginLeft: 0,
+				position:   'absolute',
+				right:      10,
+				top:        20
+			},
+
+			heading: {
+				color:      '#fff',
+				fontSize:   16,
+				marginTop:  17,
+				display:    'inline-block'
 			}
 
+		}
+
+		var items = []
+
+		if (this.state.view != 'capture') {
+			items.push(
+				h(IconButton, {
+					img: 'img/icon-arrow-left.svg',
+					style: styles.back,
+					ref: 'back',
+					key: 'back-btn',
+					onClick: this.onClickBack
+				})
+			)
+		}
+
+		if (this.state.view == 'settings') {
+			items.push(
+				h('span', {
+					style: styles.heading,
+					key: 'heading',
+				}, 'Settings')
+			)
+		} else {
+			items.push(
+				h(IconButton, {
+					img: 'img/icon-capture.svg',
+					style: styles.capture,
+					ref: 'capture',
+					key: 'capture-btn',
+				})
+			)
+		}
+
+		if (this.state.view == 'capture') {
+			items.push(
+				h(IconButton, {
+					img: 'img/icon-menu.svg',
+					style: styles.menu,
+					ref: 'menu',
+					key: 'menu-btn',
+					onClick: this.onClickMenu
+				})
+			)
 		}
 
 		return (
 			h('div', {
 				style: styles.container
-			}, [
-				h(IconButton, {
-					img: 'img/icon-capture.svg',
-					style: styles.capture,
-					ref: 'capture'
-				})
-			])
+			}, items)
 		)
 
 	}

@@ -22,6 +22,7 @@ var Rx        = require('rx')
 var React     = require('react')
 var Authorize = require('./views/authorize')
 var AppShell  = require('./views/app-shell')
+var settings  = require('./stores/settings')
 
 var h = React.createElement
 
@@ -29,6 +30,7 @@ module.exports = {
 
 	init: function(container) {
 		this.container = container
+		settings.init()
 		this.render()
 	},
 

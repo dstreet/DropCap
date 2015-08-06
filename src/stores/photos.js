@@ -26,6 +26,7 @@ var Dropbox       = require('../util/dropbox')()
 var ScreenCapture = require('../util/screen-capture')()
 var clipboard     = require('clipboard')
 var shell         = require('shell')
+var settings      = require('./settings')
 
 var fetchSubject = new Rx.Subject()
 var shareSubject = new Rx.Subject()
@@ -55,8 +56,10 @@ var captured = uiIntents.get('capture')
 	// Map file data and metadata to an object for consumption. Yum!
 	.map(function(n) {
 
-		// Trigger sharing
-		shareSubject.onNext(n.meta.path)
+		// Trigger sharing if enabled
+		if (settings.get('autoShare')) {
+			shareSubject.onNext(n.meta.path)
+		}
 
 		return {
 			data: n.file.toDataUrl(),
