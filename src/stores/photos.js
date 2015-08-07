@@ -105,7 +105,7 @@ var preview = uiIntents.get('preview')
 exports.photoStream = fetchSubject
 	// Get sequence of files from root directory metadata
 	.flatMap(function() {
-		return Rx.Observable.fromCallback(Dropbox.getMetaData)()
+		return Rx.Observable.fromNodeCallback(Dropbox.getMetaData)()
 	})
 
 	// Convert the resulting array of files to a sequence
@@ -115,7 +115,7 @@ exports.photoStream = fetchSubject
 
 	// Get file data for each file
 	.flatMap(function(n) {
-		return Rx.Observable.fromCallback(Dropbox.getFile)(n.path)
+		return Rx.Observable.fromNodeCallback(Dropbox.getFile)(n.path)
 	})
 
 	// Get base64 string and metadata for photo
@@ -135,7 +135,7 @@ exports.deleteStream =
 
 	// Send delete to Dropbox
 	.flatMap(function(d) {
-		return Rx.Observable.fromCallback(Dropbox.deleteFile)(d.data.path)
+		return Rx.Observable.fromNodeCallback(Dropbox.deleteFile)(d.data.path)
 	})
 	.subscribe(function(n) {
 		console.log('Deleted:', n)
