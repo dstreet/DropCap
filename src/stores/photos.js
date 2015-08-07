@@ -56,12 +56,18 @@ var captured = uiIntents.get('capture')
 	})
 
 	// Upload the file data
-	.flatMap(function(data) {
+	.flatMap(function(imageData) {
 
 		var time = (new Date()).getTime()
 		var name = 'capture_' + time + '.png'
+		var img = imageData.toPng()
 
-		return Rx.Observable.fromNodeCallback(Dropbox.uploadFile)(name, data)
+		return Rx.Observable.fromNodeCallback(Dropbox.uploadFile, undefined, function(body) {
+			return {
+				meta: body,
+				file: imageData
+			}
+		})(name, img)
 	})
 
 	// Map file data and metadata to an object for consumption. Yum!

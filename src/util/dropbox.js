@@ -175,11 +175,8 @@ module.exports = function() {
 				}
 			}
 
-			api._sendRequest(opts, 'utf8', file.toPng(), function(err, res) {
-				cb(err, {
-					file: file,
-					meta: JSON.parse(res.body)
-				})
+			api._sendRequest(opts, 'utf8', file, function(err, res) {
+				cb(err, JSON.parse(res.body))
 			})
 		},
 
