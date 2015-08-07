@@ -54,9 +54,12 @@ module.exports = React.createClass({
 
 	getStateStream: function() {
 		return photoStream
-			.scan(photosCache, function(acc, p) {
+
+			// Build array from stream
+			.scan(function(acc, p) {
 				return acc.concat(p)
-			})
+			}, photosCache)
+
 			// Strip out any photos that have been deleted
 			.combineLatest(
 				uiIntents.get('deletePhoto').map(function(n) { return n.data }).startWith(null),
