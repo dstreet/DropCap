@@ -19,15 +19,27 @@
  */
 
 var React            = require('react/addons')
+var Rx               = require('rx')
 var Header           = require('../components/header')
 var PhotoList        = require('./photo-list')
+var PhotoHeader      = require('./photo-header')
+var SettingsHeader   = require('./settings-header')
 var Settings         = require('./settings')
 var Authorize        = require('./authorize')
 var User             = require('../stores/user')
 var StateStreamMixin = require('rx-react').StateStreamMixin
 var uiIntents        = require('../intents/ui')
+var navIntents       = require('../intents/navigation')
+
+window.nav = navIntents
 
 var h = React.createElement
+
+var navMap = {
+	'photos':   [PhotoHeader, PhotoList],
+	'settings': [SettingsHeader, Settings],
+	'auth':     [PhotoHeader, Authorize]
+}
 
 module.exports = React.createClass({
 
@@ -35,36 +47,23 @@ module.exports = React.createClass({
 
 	mixins: [StateStreamMixin],
 
-	getInitalState: function() {
-		return {
-			token: null,
-			authorized: false,
-			showSettings: false
-		}
-	},
-
 	getStateStream: function() {
-		return User.authorize
-			.map(function(token) {
-				return {
-					token: token,
-					authorized: token ? true : false
+		return navIntents.stream.startWith('photos')
+			.combineLatest(
+				User.authorize,
+				function(nav, token) {
+					if (!token) {
+						nav = 'auth'
+					}
+
+					return {
+						token: token,
+						authorized: token ? true : false,
+						headerView: navMap[nav][0],
+						contentView: navMap[nav][1]
+					}
 				}
-			})
-	},
-
-	componentDidMount: function() {
-		var self = this
-
-		uiIntents.get('menu')
-			.subscribe(function() {
-				self.setState({ showSettings: true })
-			})
-
-		uiIntents.get('back')
-			.subscribe(function() {
-				self.setState({ showSettings: false })
-			})
+			)
 	},
 
 	render: function() {
@@ -81,7 +80,7 @@ module.exports = React.createClass({
 			overflow:     'hidden'
 		}
 
-		var photosStyle = {
+		var contentStyle = {
 			height:       390,
 			overflowY:    'scroll'
 		}
@@ -93,20 +92,31 @@ module.exports = React.createClass({
 			marginLeft:   -10
 		}
 
-		var photoListView = h(PhotoList, { style: photosStyle, token: this.state.token })
-		var settingsView  = h(Settings, {})
-
-		var contentView = this.state.authorized ? (this.state.showSettings ? settingsView : photoListView) : h(Authorize)
+		var headerStyle = {
+			height:       60,
+			background:   'rgba(47, 208, 158, 0.9)',
+			textAlign:    'center',
+			position:     'relative'
+		}
 
 		return (
 			h('div', {
 				style: style
 			}, [
-				h('img', { src: 'img/point.svg', width: 20, height: 10, style: pointStyle }),
+				h('img', {
+					src: 'img/point.svg',
+					width: 20,
+					height: 10,
+					style: pointStyle
+				}),
 
-				h(Header),
+				h('div', {
+					style: headerStyle
+				}, h(this.state.headerView)),
 
-				contentView
+				h('div', {
+					style: contentStyle
+				}, h(this.state.contentView, { token: this.state.token }))
 
 			])
 		)

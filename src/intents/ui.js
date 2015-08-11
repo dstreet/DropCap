@@ -47,7 +47,7 @@ module.exports = {
 
 		eventStream.subscribe(subject)
 
-		return subject.subscribe()
+		return this.get(name)
 	},
 
 	/**
