@@ -26,6 +26,10 @@ var settings  = require('./stores/settings')
 
 var h = React.createElement
 
+if (process.env.NODE_ENV == 'development') {
+	Rx.config.longStackSupport = true
+}
+
 module.exports = {
 
 	init: function(container) {
