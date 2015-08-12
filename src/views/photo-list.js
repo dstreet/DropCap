@@ -104,10 +104,37 @@ module.exports = React.createClass({
 			return h(Photo, { key: p.meta.rev, src: p.data, meta: p.meta })
 		})
 
+		var styles = {
+
+			emptyContainer: {
+				textAlign: 'center',
+				marginTop:  20,
+				fontSize:   14,
+				color:      '#a8a198',
+				padding:    '0 50px'
+			}
+
+		}
+
+		var empty = this.state.photos.length > 0 ? null : (
+			h('div', {
+					style: styles.emptyContainer
+				}, [
+					h('img', {
+						src: 'img/icon-arrow-up.svg',
+						width: 16,
+						height: 16
+					}),
+					h('p', null, 'Looks like you don’t have any saved captures.'),
+					h('p', null, ['Use the button above', h('br'), 'to get started'])
+				])
+		)
+
 		return (
 			h('div', {
 				style: this.props.style
 			}, [
+				empty,
 				h(ReactCSSTransitionGroup, { transitionName: 'photo' }, photos)
 			])
 		)
