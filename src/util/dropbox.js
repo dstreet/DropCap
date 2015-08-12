@@ -242,7 +242,7 @@ module.exports = function() {
 				var resObj = querystring.parse(url)
 
 				cb(null, resObj)
-				win.close()
+				win.destroy()
 			}.bind(this))
 		}
 
