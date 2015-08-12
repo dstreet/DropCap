@@ -32,11 +32,49 @@ module.exports = React.createClass({
 	},
 
 	render: function() {
-		return (
-			h('div', null, [
 
-				h('h1', null, 'You must sign in to Dropbox.'),
-				h('button', { ref: 'auth' }, 'Authorize')
+		var styles = {
+
+			container: {
+				textAlign:       'center',
+				padding:         20,
+				marginTop:       100
+			},
+
+			heading: {
+				color:           '#a8a198',
+				fontSize:        20,
+				marginBottom:    20
+			},
+
+			btn: {
+				border:          '1px solid #2fd09e',
+				borderRadius:    4,
+				fontSize:        12,
+				color:           '#2fd09e',
+				backgroundColor: 'transparent',
+				width:           '100%',
+				height:          35,
+				display:         'block',
+				marginTop:       25,
+				cursor:          'pointer',
+			}
+
+		}
+
+		return (
+			h('div', {
+				style: styles.container
+			}, [
+
+				h('span', {
+					style: styles.heading
+				}, 'Welcome, Friend!'),
+
+				h('button', {
+					ref: 'auth',
+					style: styles.btn
+				}, 'Login to Dropbox and get started')
 
 			])
 		)
