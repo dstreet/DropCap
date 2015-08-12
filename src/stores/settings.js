@@ -35,7 +35,7 @@ module.exports = {
 	 * if settings key did not exist
 	 */
 	init: function() {
-		var keyVal = localStorage.getItem('settings')
+		var keyVal = JSON.parse(localStorage.getItem('settings'))
 
 		cache = extend(true, {}, DEFAULTS, keyVal)
 
