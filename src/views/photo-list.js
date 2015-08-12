@@ -22,8 +22,10 @@ var React            = require('react/addons')
 var Photo            = require('../components/photo')
 var photoStream      = require('../stores/photos').photoStream
 var deleteStream     = require('../stores/photos').deleteStream
+var settings         = require('../stores/settings')
 var StateStreamMixin = require('rx-react').StateStreamMixin
 var uiIntents        = require('../intents/ui')
+var moment           = require('moment')
 
 var h = React.createElement
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
@@ -101,7 +103,14 @@ module.exports = React.createClass({
 	render: function() {
 
 		var photos = this.state.photos.map(function(p, i) {
-			return h(Photo, { key: p.meta.rev, src: p.data, meta: p.meta })
+			var date = new Date(p.meta.modified)
+
+			return h(Photo, {
+				key: p.meta.rev,
+				src: p.data,
+				meta: p.meta,
+				date: settings.get('relativeTime') ? moment(date).fromNow() : date.toDateString()
+			})
 		})
 
 		var styles = {

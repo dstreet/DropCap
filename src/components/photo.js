@@ -22,7 +22,7 @@ var React        = require('react')
 var uiIntents    = require('../intents/ui')
 var extend       = require('extend')
 var IconButton   = require('./icon-button')
-var shell        = require('shell')
+var moment       = require('moment')
 
 var h = React.createElement
 
@@ -142,7 +142,7 @@ module.exports = React.createClass({
 				top:                 0,
 				paddingTop:          10,
 				boxSizing:           'border-box',
-				marginLeft:          -10
+				marginLeft:          -15
 			},
 
 			metaLabel: {
@@ -188,7 +188,7 @@ module.exports = React.createClass({
 						]),
 						h('div', null, [
 							h('span', { style: styles.metaLabel }, 'Date'),
-							h('span', null, (new Date(this.props.meta.modified)).toDateString())
+							h('span', null, this.props.date)
 						])
 					]),
 

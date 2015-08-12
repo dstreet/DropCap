@@ -78,6 +78,13 @@ module.exports = React.createClass({
 					key: 'autoShare'
 				}),
 
+				h(SettingItem, {
+					label: 'Display relative time labels',
+					enabled: this.state.relativeTime,
+					onChange: this.onChange.bind(this, 'relativeTime'),
+					key: 'relativeTime'
+				}),
+
 				h('button', {
 					style: styles.deauthorize,
 					ref: 'deauthorize'
