@@ -32,7 +32,15 @@
 
 	<script>
 
+		var remote = require('remote')
+		var Menu = remote.require('menu')
 		var app = require('./src/app')
+
+		var menu = Menu.buildFromTemplate([
+			{ label: 'DropCap' }
+		])
+
+		Menu.setApplicationMenu(menu)
 
 		app.init(document.querySelector('#app > .wrapper'))
 
