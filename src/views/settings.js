@@ -68,7 +68,8 @@ module.exports = React.createClass({
 		return (
 			h('div', {
 				style: {
-					padding: 25
+					padding: 25,
+					boxSizing: 'border-box'
 				}
 			}, [
 				h(SettingItem, {

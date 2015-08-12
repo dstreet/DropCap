@@ -71,3 +71,51 @@ body * {
 .photo-leave-active {
     left: 100%;
 }
+
+.header-enter {
+    position: absolute;
+    width: 100%;
+    left: 25px;
+    opacity: 0;
+    transition: all 250ms ease-out;
+}
+
+.header-enter-active {
+    left: 0;
+    opacity: 1;
+}
+
+.header-leave {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    opacity: 1;
+    transition: all 250ms ease-out;
+}
+
+.header-leave-active {
+    left: 25px;
+    opacity: 0;
+}
+
+.content-enter {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 250ms ease-out;
+}
+
+.content-enter-active {
+    opacity: 1;
+}
+
+.content-leave {
+    position: absolute;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 250ms ease-out;
+}
+
+.content-leave-active {
+    opacity: 0;
+}

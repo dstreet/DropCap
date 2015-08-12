@@ -50,7 +50,7 @@ module.exports = {
 	 * @return {*}
 	 */
 	getAll: function() {
-			return cache
+		return cache
 	},
 
 	/**

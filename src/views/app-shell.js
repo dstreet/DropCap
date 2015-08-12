@@ -31,9 +31,8 @@ var StateStreamMixin = require('rx-react').StateStreamMixin
 var uiIntents        = require('../intents/ui')
 var navIntents       = require('../intents/navigation')
 
-window.nav = navIntents
-
 var h = React.createElement
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 var navMap = {
 	'photos':   [PhotoHeader, PhotoList],
@@ -60,7 +59,9 @@ module.exports = React.createClass({
 						token: token,
 						authorized: token ? true : false,
 						headerView: navMap[nav][0],
-						contentView: navMap[nav][1]
+						contentView: navMap[nav][1],
+						headerKey: nav + '-header',
+						contentKey: nav + '-content'
 					}
 				}
 			)
@@ -82,7 +83,8 @@ module.exports = React.createClass({
 
 		var contentStyle = {
 			height:       390,
-			overflowY:    'scroll'
+			overflowY:    'scroll',
+			position:     'relative'
 		}
 
 		var pointStyle = {
@@ -112,11 +114,18 @@ module.exports = React.createClass({
 
 				h('div', {
 					style: headerStyle
-				}, h(this.state.headerView)),
+				}, h(ReactCSSTransitionGroup, {
+					transitionName: 'header',
+					component: 'div',
+					style: { position: 'relative' }
+				}, h(this.state.headerView, { key: this.state.headerKey }))),
 
 				h('div', {
 					style: contentStyle
-				}, h(this.state.contentView, { token: this.state.token }))
+				}, h(ReactCSSTransitionGroup, {
+					transitionName: 'content',
+					component: 'div'
+				}, h(this.state.contentView, { token: this.state.token, key: this.state.contentKey })))
 
 			])
 		)
