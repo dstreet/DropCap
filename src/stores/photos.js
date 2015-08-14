@@ -32,9 +32,50 @@ var ipc           = require('ipc')
 var fetchSubject = new Rx.Subject()
 var shareSubject = new Rx.Subject()
 
+var deltaSubject = new Rx.Subject()
+var changesSubject = new Rx.Subject()
+var entriesSubject = new Rx.Subject()
+
+deltaSubject.subscribe(function(res) {
+	if (res.has_more) {
+		attachToDelta(deltaSubject)
+	} else {
+		attachToPoll(changesSubject)
+	}
+})
+
+changesSubject.subscribe(function(res) {
+	if (res.changes) {
+		attachToDelta(deltaSubject)
+	} else {
+		attachToPoll(changesSubject)
+	}
+})
+
+var entries = deltaSubject
+	.map(function(res) {
+		return res.entries
+	})
+	.filter(function(arr) {
+		return arr.length
+	})
+	.flatMap(function(arr) {
+		return Rx.Observable.from(arr)
+	})
+
+var additions = entries
+	.filter(function(entry) {
+		return entry[1] != null
+	})
+
+var deletions = entries
+	.filter(function(entry) {
+		return entry[1] == null
+	})
+
 exports.fetch = function(token) {
 	Dropbox.setToken(token)
-	fetchSubject.onNext()
+	attachToDelta(deltaSubject)
 }
 
 var captured = uiIntents.get('capture')
@@ -102,20 +143,10 @@ var preview = uiIntents.get('preview')
 		shell.openExternal(n.url)
 	})
 
-exports.photoStream = fetchSubject
-	// Get sequence of files from root directory metadata
-	.flatMap(function() {
-		return Rx.Observable.fromNodeCallback(Dropbox.getMetaData)()
-	})
-
-	// Convert the resulting array of files to a sequence
-	.flatMap(function(n) {
-		return Rx.Observable.from(n.contents)
-	})
-
+exports.photoStream = additions
 	// Get file data for each file
-	.flatMap(function(n) {
-		return Rx.Observable.fromNodeCallback(Dropbox.getFile)(n.path)
+	.flatMap(function(entry) {
+		return Rx.Observable.fromNodeCallback(Dropbox.getFile)(entry[0])
 	})
 
 	// Get base64 string and metadata for photo
@@ -129,9 +160,8 @@ exports.photoStream = fetchSubject
 	// Merge the captured image stream
 	.merge(captured)
 
-exports.deleteStream =
-	// Observe photo deletion UI event
-	uiIntents.get('deletePhoto')
+// Observe photo deletion UI event
+uiIntents.get('deletePhoto')
 
 	// Send delete to Dropbox
 	.flatMap(function(d) {
@@ -140,3 +170,26 @@ exports.deleteStream =
 	.subscribe(function(n) {
 		console.log('Deleted:', n)
 	})
+
+exports.deleteStream = uiIntents.get('deletePhoto')
+	.map(function(d) {
+		return d.data.path
+	})
+	.merge(deletions.map(function(file) { return file[0] }))
+
+
+function attachToDelta(subject) {
+	return Rx.Observable
+		.fromNodeCallback(Dropbox.getDelta)()
+		.subscribe(function(res) {
+			subject.onNext(res)
+		})
+}
+
+function attachToPoll(subject) {
+	return Rx.Observable
+		.fromNodeCallback(Dropbox.doPoll)()
+		.subscribe(function(res) {
+			subject.onNext(res)
+		})
+}

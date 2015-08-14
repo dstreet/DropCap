@@ -25,6 +25,7 @@ var BrowserWindow = remote.require('browser-window');
 var config        = remote.require('./config').dropbox
 
 var token = null
+var cursor = null
 
 module.exports = function() {
 
@@ -98,6 +99,58 @@ module.exports = function() {
 				headers: {
 					'Authorization': 'Bearer ' + token
 				}
+			}
+
+			api._sendRequest(opts, 'utf8', null, function(err, res) {
+				if (err) {
+					return cb(err)
+				}
+
+				cb(null, JSON.parse(res.body))
+			})
+		},
+
+		/**
+		 * Get a list of all changes in the directory
+		 * 
+		 * @param  {Function} cb
+		 */
+		getDelta: function(cb) {
+			var data = cursor ? querystring.stringify({ cursor: cursor }) : null
+
+			var opts = {
+				hostname: 'api.dropbox.com',
+				path: '/1/delta',
+				method: 'POST',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Content-Length': data ? data.length : 0
+				}
+			}
+
+			api._sendRequest(opts, 'utf8', data, function(err, res) {
+				if (err) {
+					return cb(err)
+				}
+
+				var body = JSON.parse(res.body)
+
+				cursor = body.cursor
+				cb(null, body)
+			})
+		},
+
+		/**
+		 * Start a long polling request to listen for changes to the directory
+		 * 
+		 * @param  {Function} cb
+		 */
+		doPoll: function(cb) {
+			var opts = {
+				hostname: 'api.dropbox.com',
+				path: '/1/longpoll_delta?cursor=' + cursor,
+				method: 'GET'
 			}
 
 			api._sendRequest(opts, 'utf8', null, function(err, res) {

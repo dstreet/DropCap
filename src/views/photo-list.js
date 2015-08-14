@@ -64,13 +64,13 @@ module.exports = React.createClass({
 
 			// Strip out any photos that have been deleted
 			.combineLatest(
-				uiIntents.get('deletePhoto').map(function(n) { return n.data }).startWith(null),
-				function(photos, d) {
-					if (d) {
+				deleteStream.startWith(null),
+				function(photos, dPath) {
+					if (dPath) {
 						var index = -1
 
 						photos.forEach(function(photo, i) {
-							if (photo.meta.path == d.path) {
+							if (photo.meta.path == dPath) {
 								index = i
 							}
 						})
