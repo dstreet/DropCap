@@ -146,7 +146,7 @@ var preview = uiIntents.get('preview')
 exports.photoStream = additions
 	// Get file data for each file
 	.flatMap(function(entry) {
-		return Rx.Observable.fromNodeCallback(Dropbox.getFile)(entry[0])
+		return Rx.Observable.fromNodeCallback(Dropbox.getThumbnail)(entry[0])
 	})
 
 	// Get base64 string and metadata for photo

@@ -191,6 +191,39 @@ module.exports = function() {
 		},
 
 		/**
+		 * Get the thumbnail of a file
+		 * 
+		 * @param  {String}   path
+		 * @param  {Function} cb
+		 */
+		getThumbnail: function(path, cb) {
+			var params = querystring.stringify({
+				format: 'png',
+				size: 'm'
+			})
+
+			var opts = {
+				hostname: 'api-content.dropbox.com',
+				path: '/1/thumbnails/auto' + path + '?' + params,
+				method: 'GET',
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			}
+
+			api._sendRequest(opts, 'binary', null, function(err, res) {
+				if (err) {
+					return cb(err)
+				}
+
+				cb(null, {
+					meta: JSON.parse(res.headers['x-dropbox-metadata']),
+					data: res.body
+				})
+			})
+		},
+
+		/**
 		 * Delete a file
 		 *
 		 * @param  {String}   path
