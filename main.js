@@ -23,18 +23,17 @@ var menubar = require('menubar')
 
 var mainWindow = null
 var mb = menubar({
-	width:       320,
-	height:      460,
-	transparent: true,
-	frame:       false,
-	resizable:   false,
-	icon:        'IconTemplate.png',
-	show: true,
-	'always-on-top': true,
-	index:       'file://' + __dirname + '/index.html',
-	'web-preferences': {
-		'experimental-features': true
-	}
+	width:                    320,
+	height:                   460,
+	transparent:              true,
+	frame:                    false,
+	resizable:                false,
+	icon:                     'IconTemplate.png',
+	show:                     true,
+	'show-on-all-workspaces': true,
+	'always-on-top':          process.env.NODE_ENV == 'development' ? true : false,
+	index:                    'file://' + __dirname + '/index.html',
+	'web-preferences':        { 'experimental-features': true }
 })
 
 mb.app.commandLine.appendSwitch('enable-experimental-web-platform-features')

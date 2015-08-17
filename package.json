@@ -11,7 +11,7 @@
   "license": "GPLv3",
   "dependencies": {
     "extend": "^3.0.0",
-    "menubar": "^2.0.14",
+    "menubar": "^2.1.2",
     "moment": "^2.10.6",
     "react": "^0.13.3",
     "rx": "^3.0.0",
