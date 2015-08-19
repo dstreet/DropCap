@@ -18,7 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var extend = require('extend')
+var Rx        = require('rx')
+var extend    = require('extend')
+var ipc       = require('ipc')
 
 var DEFAULTS = {
 	relativeTime: true,
@@ -26,7 +28,24 @@ var DEFAULTS = {
 	launch:       false
 }
 
+var subject = new Rx.Subject()
 var cache = {}
+
+subject
+	.do(function(s) {
+		cache[s.item] = s.value
+		localStorage.setItem('settings', JSON.stringify(cache))
+	})
+	.filter(function(s) {
+		return s.item == 'launch'
+	})
+	.subscribe(function(s) {
+		if (s.value) {
+			ipc.send('enable-startup')
+		} else {
+			ipc.send('disable-startup')
+		}
+	})
 
 module.exports = {
 
@@ -77,12 +96,8 @@ module.exports = {
 	 * Set a single property in the settings cache, and persist
 	 * to localStorage
 	 * 
-	 * @param {String} item 
-	 * @param {*} val  
+	 * @param {Object} item
 	 */
-	set: function(item, val) {
-		cache[item] = val
-		localStorage.setItem('settings', JSON.stringify(cache))
-	}
+	set: function(obj) { subject.onNext(obj) }
 
 }

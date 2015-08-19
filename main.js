@@ -20,6 +20,7 @@
 
 var ipc     = require('ipc')
 var menubar = require('menubar')
+var startup  = require('./lib/startup')
 
 var mainWindow = null
 var mb = menubar({
@@ -28,7 +29,7 @@ var mb = menubar({
 	transparent:              true,
 	frame:                    false,
 	resizable:                false,
-	icon:                     'IconTemplate.png',
+	icon:                     __dirname + '/IconTemplate.png',
 	show:                     true,
 	'show-on-all-workspaces': true,
 	'always-on-top':          process.env.NODE_ENV == 'development' ? true : false,
@@ -54,4 +55,16 @@ ipc.on('hide-window', function() {
 
 ipc.on('show-window', function() {
 	mb.window.show()
+})
+
+ipc.on('enable-startup', function() {
+	startup(mb.app).enable()
+})
+
+ipc.on('disable-startup', function() {
+	startup(mb.app).disable()
+})
+
+ipc.on('quit-app', function() {
+	mb.app.quit()
 })

@@ -34,6 +34,7 @@ module.exports = React.createClass({
 	},
 
 	componentDidMount: function() {
+		uiIntents.set('quit',        React.findDOMNode(this.refs.quit),        'click')
 		uiIntents.set('deauthorize', React.findDOMNode(this.refs.deauthorize), 'click')
 	},
 
@@ -44,6 +45,11 @@ module.exports = React.createClass({
 		this.setState(state, function() {
 			settings.set(item, val)
 		}.bind(this))
+
+		settings.set({
+			item: item,
+			value: val
+		})
 	},
 
 	render: function() {
@@ -85,6 +91,19 @@ module.exports = React.createClass({
 					onChange: this.onChange.bind(this, 'relativeTime'),
 					key: 'relativeTime'
 				}),
+
+				h(SettingItem, {
+					label: 'Launch at login',
+					ref: 'launch',
+					enabled: this.state.launch,
+					onChange: this.onChange.bind(this, 'launch'),
+					key: 'launch'
+				}),
+
+				h('button', {
+					style: styles.deauthorize,
+					ref: 'quit'
+				}, 'Quit'),
 
 				h('button', {
 					style: styles.deauthorize,

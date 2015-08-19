@@ -20,6 +20,8 @@
 
 var Rx        = require('rx')
 var React     = require('react')
+var ipc       = require('ipc')
+var uiIntents = require('./intents/ui')
 var Authorize = require('./views/authorize')
 var AppShell  = require('./views/app-shell')
 var settings  = require('./stores/settings')
@@ -29,6 +31,11 @@ var h = React.createElement
 if (process.env.NODE_ENV == 'development') {
 	Rx.config.longStackSupport = true
 }
+
+uiIntents.get('quit')
+	.subscribe(function() {
+		ipc.send('quit-app')
+	})
 
 module.exports = {
 

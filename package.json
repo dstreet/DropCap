@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "/bin/bash ./bin/icon && /bin/bash ./bin/build"
+    "build": "/bin/bash ./bin/icon && /usr/bin/env node ./bin/build.js"
   },
   "author": "David Street",
   "license": "GPLv3",
@@ -13,6 +13,7 @@
     "extend": "^3.0.0",
     "menubar": "^2.1.2",
     "moment": "^2.10.6",
+    "plist": "^1.1.0",
     "react": "^0.13.3",
     "rx": "^3.0.0",
     "rx-react": "^0.2.0",
