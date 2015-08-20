@@ -148,7 +148,7 @@ module.exports = function() {
 		 */
 		doPoll: function(cb) {
 			var opts = {
-				hostname: 'api.dropbox.com',
+				hostname: 'api-notify.dropbox.com',
 				path: '/1/longpoll_delta?cursor=' + cursor,
 				method: 'GET'
 			}
