@@ -1,25 +1,35 @@
-# DropCap
+DropCap
+=======
 
 Electron app to take and sync screen captures with Dropbox. App will
-automatically make shareable links and copy the link to your clipboard for
-fast and easy sharing.
+automatically make shareable links and copy the link to your clipboard for fast
+and easy sharing.
 
 ![DropCap](/screenshot.png?raw=true)
 
-**Warning:** This is still a work in progress. Use at your own risk!
+## Usage
 
-## Setup
+Download the [latest release](https://github.com/dstreet/DropCap/releases) for
+your OS. Unpackage the app, and run!
+
+## Contributing and/or Redistributing
+
+Please read the
+[contributing guidelines](/CONTRIBUTING.md)
+prior to submitting an issue or pull request
+
+### Setup
 
 1. First, you must create an app in Dropbox.
 2. Copy `config.sample.js` to `config.js`, and add your Dropbox app key to the
    config.
 3. Install Electron: `npm install -g electron-prebuilt`
 
-## Running
+### Running
 
 `electron DropCap`
 
-## Building for Release
+### Building for Release
 
 `npm run build`
 
