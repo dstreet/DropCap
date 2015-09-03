@@ -23,9 +23,11 @@ var extend    = require('extend')
 var ipc       = require('ipc')
 
 var DEFAULTS = {
-	relativeTime: true,
-	autoShare:    true,
-	launch:       false
+	relativeTime:    true,
+	autoShare:       true,
+	launch:          false,
+	shortcutOpen:    'Ctrl+Alt+C',
+	shortcutCapture: 'Shift+Cmd+5'
 }
 
 var subject = new Rx.Subject()

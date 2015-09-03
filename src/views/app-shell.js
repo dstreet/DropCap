@@ -25,6 +25,8 @@ var PhotoList        = require('./photo-list')
 var PhotoHeader      = require('./photo-header')
 var SettingsHeader   = require('./settings-header')
 var Settings         = require('./settings')
+var ShortcutsHeader  = require('./shortcuts-header')
+var Shortcuts        = require('./shortcuts')
 var Authorize        = require('./authorize')
 var User             = require('../stores/user')
 var StateStreamMixin = require('rx-react').StateStreamMixin
@@ -35,9 +37,10 @@ var h = React.createElement
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 var navMap = {
-	'photos':   [PhotoHeader, PhotoList],
-	'settings': [SettingsHeader, Settings],
-	'auth':     [PhotoHeader, Authorize]
+	'photos':    [PhotoHeader, PhotoList],
+	'settings':  [SettingsHeader, Settings],
+	'shortcuts': [ShortcutsHeader, Shortcuts],
+	'auth':      [PhotoHeader, Authorize]
 }
 
 module.exports = React.createClass({

@@ -18,8 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var ipc     = require('ipc')
-var menubar = require('menubar')
+var ipc      = require('ipc')
+var menubar  = require('menubar')
+var shortcut = require('global-shortcut')
 var startup  = require('./lib/startup')
 
 var mainWindow = null

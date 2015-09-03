@@ -1,6 +1,6 @@
 /*!
- * Settings Item
- * ~~~~~~~~~~~~~
+ * Settings Link
+ * ~~~~~~~~~~~~~~~~~~~~~~~
  *
  * Copyright (C) 2015  David Street
  *
@@ -24,7 +24,7 @@ var h = React.createElement
 
 module.exports = React.createClass({
 
-	displayName: 'Setting Item',
+	displayName: 'Settings Checkbox',
 
 	propTypes: {
 		label: React.PropTypes.string.isRequired,
@@ -39,10 +39,6 @@ module.exports = React.createClass({
 		}
 	},
 
-	onChange: function() {
-		this.props.onChange(!this.props.enabled)
-	},
-
 	render: function() {
 
 		var styles = {
@@ -51,45 +47,27 @@ module.exports = React.createClass({
 				borderBottom:    '1px solid #ccc3bc',
 				padding:         '15px 0',
 				marginLeft:      10,
-				position:        'relative'
+				position:        'relative',
+				cursor:          'pointer'
 			},
 
 			label: {
-				color:           '#a8a198',
+				color:           '#2fd09e',
 				fontSize:        14,
 				marginLeft:      -10
 			},
-
-			checkbox: {
-				border:           '1px solid',
-				borderColor:      this.props.enabled ? '#2fd09e' : '#ccc3bc',
-				width:            15,
-				height:           15,
-				WebkitAppearance: 'none',
-				outline:          'none',
-				borderRadius:     4,
-				position:         'absolute',
-				right:            0,
-				background:       this.props.enabled ? '#2fd09e url(img/check.svg) no-repeat' : null
-			}
 
 		}
 
 		return (
 			h('div', {
-				style: styles.container
+				style: styles.container,
+				onClick: this.props.onClick
 			}, [
 
 				h('span', {
 					style: styles.label
 				}, this.props.label),
-
-				h('input', {
-					type: 'checkbox',
-					style: styles.checkbox,
-					onChange: this.onChange,
-					defaultChecked: this.props.enabled
-				})
 			])
 		)
 

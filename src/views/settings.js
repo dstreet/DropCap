@@ -18,10 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var React       = require('react/addons')
-var SettingItem = require('../components/setting-item')
-var uiIntents   = require('../intents/ui')
-var settings    = require('../stores/settings')
+var React            = require('react/addons')
+var SettingsCheckbox = require('../components/settings-checkbox')
+var SettingsLink     = require('../components/settings-link')
+var uiIntents        = require('../intents/ui')
+var navIntents       = require('../intents/navigation')
+var settings         = require('../stores/settings')
 
 var h = React.createElement
 
@@ -43,13 +45,15 @@ module.exports = React.createClass({
 
 		state[item] = val
 		this.setState(state, function() {
-			settings.set(item, val)
+			settings.set({
+				item: item,
+				value: val
+			})
 		}.bind(this))
+	},
 
-		settings.set({
-			item: item,
-			value: val
-		})
+	onLinkClick: function(view) {
+		navIntents.route(view)
 	},
 
 	render: function() {
@@ -78,26 +82,32 @@ module.exports = React.createClass({
 					boxSizing: 'border-box'
 				}
 			}, [
-				h(SettingItem, {
+				h(SettingsCheckbox, {
 					label: 'Create share link automatically',
 					enabled: this.state.autoShare,
 					onChange: this.onChange.bind(this, 'autoShare'),
 					key: 'autoShare'
 				}),
 
-				h(SettingItem, {
+				h(SettingsCheckbox, {
 					label: 'Display relative time labels',
 					enabled: this.state.relativeTime,
 					onChange: this.onChange.bind(this, 'relativeTime'),
 					key: 'relativeTime'
 				}),
 
-				h(SettingItem, {
+				h(SettingsCheckbox, {
 					label: 'Launch at login',
 					ref: 'launch',
 					enabled: this.state.launch,
 					onChange: this.onChange.bind(this, 'launch'),
 					key: 'launch'
+				}),
+
+				h(SettingsLink, {
+					label: 'Gobal Shortcuts',
+					onClick: this.onLinkClick.bind(this, 'shortcuts'),
+					key: 'shortcuts'
 				}),
 
 				h('button', {
