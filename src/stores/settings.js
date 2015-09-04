@@ -21,6 +21,7 @@
 var Rx        = require('rx')
 var extend    = require('extend')
 var ipc       = require('ipc')
+var uiIntents = require('../intents/ui')
 
 var DEFAULTS = {
 	relativeTime:    true,
@@ -33,11 +34,17 @@ var DEFAULTS = {
 var subject = new Rx.Subject()
 var cache = {}
 
-subject
+ipc.on('shortcut-open', function() {
+	ipc.send('show-window')
+})
+
+var settingsStream = subject
 	.do(function(s) {
 		cache[s.item] = s.value
 		localStorage.setItem('settings', JSON.stringify(cache))
 	})
+
+settingsStream
 	.filter(function(s) {
 		return s.item == 'launch'
 	})
@@ -47,6 +54,22 @@ subject
 		} else {
 			ipc.send('disable-startup')
 		}
+	})
+
+settingsStream
+	.filter(function(s) {
+		return s.item == 'shortcutOpen'
+	})
+	.subscribe(function(s) {
+		ipc.send('register-shortcut', 'shortcutOpen', s.value, 'shortcut-open')
+	})
+
+settingsStream
+	.filter(function(s) {
+		return s.item == 'shortcutCapture'
+	})
+	.subscribe(function(s) {
+		ipc.send('register-shortcut', 'shortcutCapture', s.value, 'shortcut-capture')
 	})
 
 module.exports = {

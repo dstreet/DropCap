@@ -35,6 +35,7 @@ var shareSubject = new Rx.Subject()
 var deltaSubject = new Rx.Subject()
 var changesSubject = new Rx.Subject()
 var entriesSubject = new Rx.Subject()
+var shortcutSubject = new Rx.Subject()
 
 deltaSubject.subscribe(function(res) {
 	if (res.has_more) {
@@ -79,6 +80,13 @@ exports.fetch = function(token) {
 }
 
 var captured = uiIntents.get('capture')
+	// Merge the shortcut stream
+	.merge(Rx.Observable.fromEventPattern(
+		function add(h) {
+			ipc.on('shortcut-capture', h)
+		}
+	))
+
 	// Hide the window
 	.do(function() {
 		ipc.send('hide-window')
@@ -124,6 +132,10 @@ var captured = uiIntents.get('capture')
 			meta: n.meta
 		}
 	})
+
+// This is needed to ensure the shortcut capture
+// stream is merged
+captured.subscribe(function() {})
 
 shareSubject
 	.merge(uiIntents.get('share').map(function(e) { return e.data.path }))

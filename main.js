@@ -38,10 +38,16 @@ var mb = menubar({
 	'web-preferences':        { 'experimental-features': true }
 })
 
+var shortcutCache = {}
+
 mb.app.commandLine.appendSwitch('enable-experimental-web-platform-features')
 
 mb.app.on('window-all-closed', function() {
 	mb.app.quit()
+})
+
+mb.app.on('will-quit', function() {
+	shortcut.unregisterAll()
 })
 
 mb.on('show', function() {
@@ -64,6 +70,19 @@ ipc.on('enable-startup', function() {
 
 ipc.on('disable-startup', function() {
 	startup(mb.app).disable()
+})
+
+ipc.on('register-shortcut', function(e, cacheKey, accel, message) {
+	
+	console.log('registering shortcut', accel, 'to send message:', message)
+
+	if (shortcutCache.hasOwnProperty(cacheKey)) {
+		shortcut.unregister(shortcutCache[cacheKey])
+	}
+
+	shortcut.register(accel, function() {
+		e.sender.send(message)
+	})
 })
 
 ipc.on('quit-app', function() {
