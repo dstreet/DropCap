@@ -86,6 +86,13 @@ module.exports = {
 		if (!keyVal) {
 			localStorage.setItem('settings', JSON.stringify(cache))
 		}
+
+		for (key in cache) {
+			this.set({
+				item: key,
+				value: cache[key]
+			})
+		}
 	},
 
 	/**
