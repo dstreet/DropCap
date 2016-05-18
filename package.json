@@ -4,6 +4,7 @@
   "description": "Sync screen captures with Dropbox",
   "main": "main.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "/bin/bash ./bin/icon && /usr/bin/env node ./bin/build.js"
   },
@@ -20,6 +21,7 @@
     "snabbdom": "^0.2.1"
   },
   "devDependencies": {
-    "electron-packager": "^5.0.1"
+    "electron-packager": "^5.0.1",
+    "electron-prebuilt": "^0.30.2"
   }
 }

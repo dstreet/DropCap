@@ -20,14 +20,15 @@ prior to submitting an issue or pull request
 
 ### Setup
 
-1. First, you must create an app in Dropbox.
+1. First, you must
+   [create an app](https://www.dropbox.com/developers/apps/create) in Dropbox.
 2. Copy `config.sample.js` to `config.js`, and add your Dropbox app key to the
    config.
-3. Install Electron: `npm install -g electron-prebuilt`
+3. Install dependencies: `npm install`
 
 ### Running
 
-`electron DropCap`
+`npm start`
 
 ### Building for Release
 
